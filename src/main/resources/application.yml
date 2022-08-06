@@ -1,0 +1,52 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+  datasource:
+    url: ${datasourceurl}
+    username: ${dbusername}
+    password: ${dbpassword}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        format_sql : true # sql 예쁘게 출력
+        default_batch_fetch_size: 1000
+
+    show-sql: true  # sql 출력
+    open-in-view: false
+
+  servlet:
+    multipart:
+      max-file-size: 10MB # 파일 업로드 요청 시 하나의 파일 크기 10MB로 제한
+      max-request-size: 100MB # 파일 업로드 요청 시 모든 파일의 크기의합 100MB로 제한
+
+logging:
+  level:
+    org.hibernate.type: trace
+
+file:
+  upload:
+    path: C:/Users/woo/myimage/
+
+kakao:
+  client:
+    id: {kakaoclientid}  # id와 시크릿 키는 외부 주입 or 암호화해서 깃에 올리자.
+    secret: {kakaoclientsecret} # 시크릿 키는 앱의 비밀번호와 같음
+
+token:
+  secret: ${tokensecret}
+  access-token-expiration-time: 900000  # 15분
+  refresh-token-expiration-time: 1210500000 # 2주
+
