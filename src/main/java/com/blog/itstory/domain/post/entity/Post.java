@@ -2,6 +2,7 @@ package com.blog.itstory.domain.post.entity;
 
 import com.blog.itstory.domain.comment.entity.Comment;
 import com.blog.itstory.domain.common.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,10 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    @Builder
+    public Post(String postTitle, String postContent) {
+        this.postTitle = postTitle;
+        this.postContent = postContent;
+    }
 }

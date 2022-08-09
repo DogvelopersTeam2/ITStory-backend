@@ -1,0 +1,53 @@
+name: itstory-api
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  NAME: vact19 #  계정명
+  REPO: itstory-api # 도커 허브 Repository 이름#
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Make graldew executable
+        run : chmod +x ./gradlew
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+        with:
+          arguments: build
+          build-root-directory: ./
+
+      - name : Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile # Repository Root 폴더의  Dockerfile을 이용한 빌드
+          push: true
+          tags: ${{env.NAME}}/${{env.REPO}}:latest
+
+  deploy: # 이 작업은 빌드 이후 이루어지며, ec2가 도커 이미지를 가져와서 컨테이너를 띄우는 작업임
+    needs: build
+    name: Deploy
+    runs-on: [self-hosted, label-development] # github 에서 self-hosted에 등록하고 label-development 설정했음.
+    steps:
+      - name: deploy run
+        run: |
+          sudo sh /home/ec2-user/run.sh
