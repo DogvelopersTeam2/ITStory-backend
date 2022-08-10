@@ -13,7 +13,7 @@ spring:
     # 왜 ${datasourceurl} 하면 java.lang.IllegalArgumentException: URL must start with 'jdbc'  오류가? -> 실행환경에서 VM OPTIONS를 인식하지 못함
     url: ${datarsourceurl}
     username: ${datasourceusername}
-    password:  ${password} # rds 환경에 맞게 변경#.
+    password:  ${password} # rds 환경에 맞게 변경#
     #driver-class-name: org.mariadb.jdbc.Driver  # rds 환경에서 사용하지 않음
 
   jpa:
