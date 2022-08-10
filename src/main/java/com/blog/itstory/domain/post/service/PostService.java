@@ -29,6 +29,31 @@ public class PostService {
     public Post save(Post newPost) {
         return postRepository.save(newPost);
     }
+
+    // repository.save()는 Transactional 이 없어도 되지만,
+    // delete 관련 메소드는 동작하지 않음
+    @Transactional
+    public void deleteById(Long postId){
+        Post post = postRepository.findById(postId).get();
+        postRepository.delete(post);
+    }
+
+    // 당장은 ApiPostService.updatePost() 로만 호출된다고 해도, 단독 사용될 수도 있기에
+    // @Transactional 사용한다.
+    @Transactional
+    public Post updatePost(Long postId, Post updatePost) {
+
+        /**
+         *  이 메소드를 처음 만드는 시점은 ApiPostService.updatePost()를 생성하는 과정에서 만들었다.
+         *  그러나 domain 계층의 Service 클래스를 개발중이기 때문에, 단독 사용을 가정하고 개발한다.
+         */
+        Post post = postRepository.findById(postId).get(); // DB 에서 조회해서 컨텍스트에 올린 post객체
+
+        // 컨텍스트에 없는 updatePost 객체를 파라미터로 받아, 컨텍스트에 있는 객체인 post를 업데이트한다(변경감지).
+        post.updatePost(updatePost);
+        return post;
+
+    }
 }
 
 

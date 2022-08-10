@@ -1,24 +1,33 @@
 package com.blog.itstory.api.post.controller;
 
+import com.blog.itstory.api.post.dto.DeletePostDto;
 import com.blog.itstory.api.post.dto.GetPostDto;
 import com.blog.itstory.api.post.dto.NewPostDto;
+import com.blog.itstory.api.post.dto.UpdatePostDto;
+import com.blog.itstory.api.post.service.ApiPostService;
 import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.repository.PostRepository;
 import com.blog.itstory.domain.post.service.PostService;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/post")
-public class ApiPostController {
+// 컨트롤러는 필연적으로 Dto 에 의존하게 되므로,
+// domain 계층에서 똑같이 PostController 이름을 하고 있는 클래스가 생길 걱정은 안 해도 될 듯.
+// ApiPostController 가 아닌 PostController 로 하자.
+public class PostController {
 
-    private final PostService postService;
+    private final PostService postService; // 도메인 자체와 관련된 일을 하는 postService
+    private final ApiPostService apiPostService; // 특정 DTO와 관련된 일을 하는 PostService
 
     @ApiOperation(value = "전체 글 조회")
     @GetMapping("/list")
@@ -28,13 +37,13 @@ public class ApiPostController {
         List<Post> posts = postService.findAll();
 
         // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
-        List<GetPostDto> postDtos = GetPostDto.from(posts);
+        List<GetPostDto> postDtos = GetPostDto.of(posts);
 
         return ResponseEntity.ok(postDtos);
     }
 
     @ApiOperation(value = "글 작성")
-    @PostMapping("/new")
+    @PostMapping
     public ResponseEntity<NewPostDto.Response> newPost(@RequestBody NewPostDto.Request newPostRequestDto){
 
         // Request 정보를 활용, Post 객체 생성
@@ -57,4 +66,47 @@ public class ApiPostController {
 
         return ResponseEntity.ok(response);
     }
+
+    @ApiOperation(value = "글 수정")
+    @PatchMapping
+    public ResponseEntity<UpdatePostDto.Response> updatePost(
+                                                @RequestBody UpdatePostDto.Request updatePostRequestDto){
+
+        // 서비스에 DTO 데이터를 보내서 업데이트
+        UpdatePostDto.Response updatePostResponseDto = apiPostService.updatePost(updatePostRequestDto);
+
+        // 수정 후 반환용으로, 단순 제목과 내용만 담긴 반환용 객체를 반환
+        return ResponseEntity.ok(updatePostResponseDto);
+    }
+
+    // DTO 를 만들기 귀찮으며 데이터 형식이 하나로 고정일 경우, Map으로 받을 수 있다.
+    @ApiOperation(value = "글 삭제")
+    @DeleteMapping
+    public ResponseEntity deletePost(@RequestBody Map< String, Long> deleteMap){
+
+        Long postId = deleteMap.get("postId");
+        postService.deleteById(postId);
+
+        return ResponseEntity.ok().build();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

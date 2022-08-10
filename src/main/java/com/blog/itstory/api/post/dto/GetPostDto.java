@@ -29,13 +29,13 @@ public class GetPostDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate createTime;
 
-    public static List<GetPostDto> from(List<Post> posts){
+    public static List<GetPostDto> of(List<Post> posts){
         return posts.stream()
-                .map(post -> GetPostDto.from(post))
+                .map(post -> GetPostDto.of(post))
                 .collect(Collectors.toList());
     }
 
-    public static GetPostDto from(Post post){
+    public static GetPostDto of(Post post){
         return GetPostDto.builder()
                 .postId(post.getPostId())
                 .postTitle(post.getPostTitle())
