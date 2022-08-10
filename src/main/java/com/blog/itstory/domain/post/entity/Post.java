@@ -2,6 +2,7 @@ package com.blog.itstory.domain.post.entity;
 
 import com.blog.itstory.domain.comment.entity.Comment;
 import com.blog.itstory.domain.common.BaseEntity;
+import com.blog.itstory.domain.post.constant.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,12 +28,17 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String postContent;
 
+    @Column(nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     @Builder
-    public Post(String postTitle, String postContent) {
+    public Post(String postTitle, String postContent, Category category) {
         this.postTitle = postTitle;
         this.postContent = postContent;
+        this.category = category;
     }
 }

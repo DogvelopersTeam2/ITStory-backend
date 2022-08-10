@@ -4,6 +4,9 @@ import com.blog.itstory.api.test.dto.ApiTestDto;
 import com.blog.itstory.domain.member.constant.Role;
 import com.blog.itstory.domain.member.entity.Member;
 import com.blog.itstory.domain.member.repository.MemberRepository;
+import com.blog.itstory.domain.post.constant.Category;
+import com.blog.itstory.domain.post.entity.Post;
+import com.blog.itstory.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import java.util.List;
 public class ApiTestController {
 
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
     @GetMapping("/member1")
     public String healthCheck(){
@@ -59,6 +63,33 @@ public class ApiTestController {
                 .build();
 
         return ResponseEntity.ok(testDto);
+    }
+
+    //@GetMapping("/dummy")
+    public String createDummyData(){
+        Post post1 = Post.builder()
+                .postTitle("백엔드 게시글 제목")
+                .postContent("백엔드 게시글 내용")
+                .category(Category.BACKEND)
+                .build();
+
+        Post post2 = Post.builder()
+                .postTitle("IOS 게시글 제목")
+                .postContent("IOS 게시글 내용")
+                .category(Category.IOS)
+                .build();
+
+        Post post3 = Post.builder()
+                .postTitle("프론트엔드 게시글 제목")
+                .postContent("프론트엔드 게시글 내용")
+                .category(Category.FRONTEND)
+                .build();
+
+        postRepository.save(post1);
+        postRepository.save(post2);
+        postRepository.save(post3);
+
+        return "더미데이터 저장 완료";
     }
 
 
