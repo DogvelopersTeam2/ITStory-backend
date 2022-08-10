@@ -13,7 +13,7 @@ spring:
     # 왜 ${datasourceurl} 하면 java.lang.IllegalArgumentException: URL must start with 'jdbc'  오류가?
     url: jdbc:mariadb://project-lion-api-db.c9meh9rc5ju2.ap-northeast-2.rds.amazonaws.com:3306/itstory?serverTimezone=Asia/Seoul
     username: root1
-    password: rootroot #${password} # rds 환경에 맞게 변경#.
+    password:  ${password} # rds 환경에 맞게 변경#.
     #driver-class-name: org.mariadb.jdbc.Driver  # rds 환경에서 사용하지 않음
 
   jpa:
