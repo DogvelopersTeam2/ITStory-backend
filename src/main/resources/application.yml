@@ -43,7 +43,7 @@ file:
 
 kakao:
   client:
-    id: {kakaoclientid}  # id와 시크릿 키는 외부 주입 or 암호화해서 깃에 올리자.
+    id: {kakaoclientid}  # id와 시크릿 키는 외부 주입 or 암호화해서 깃에 올리자.!
     secret: {kakaoclientsecret} # 시크릿 키는 앱의 비밀번호와 같음
 
 token:
