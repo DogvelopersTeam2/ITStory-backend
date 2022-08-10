@@ -1,6 +1,7 @@
 package com.blog.itstory.api.post.dto;
 
 import com.blog.itstory.domain.comment.entity.Comment;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,8 @@ public class NewPostDto {
         @ApiModelProperty(value = "게시글 본문", required = true, example = "게시글 본문입니다")
         private String postContent;
 
-        @ApiModelProperty(value = "게시글 작성일", required = true, example = "게시글 작성일입니다")
+        @ApiModelProperty(value = "게시글 작성일", required = true, example = "2022-08-10")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDate createTime;
     }
 
