@@ -7,10 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ItstoryApplicationTests {
 
-    @Test
-    public void enumTest(){
-        Category category = Category.valueOf("category");
-        System.out.println("category = " + category);
-    }
+//    @Test
+//    public void enumTest(){
+//        Category category = Category.valueOf("category");
+//        System.out.println("category = " + category);
+//    }
 
 }
