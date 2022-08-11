@@ -7,9 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ItstoryApplicationTests {
 
-    @Test
-    public void enumTest(){
 
-    }
 
 }
