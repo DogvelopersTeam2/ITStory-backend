@@ -4,6 +4,8 @@ import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,10 @@ public class PostService {
     // readOnly
     public List<Post> findAll() {
         return postRepository.findAll();
+    }
+
+    public Page<Post> findAll(Pageable pageable){
+        return postRepository.findAll(pageable);
     }
 
     public Post findById(Long id) {
@@ -60,8 +66,8 @@ public class PostService {
 
     }
 
-    public List<Post> findAllByCategory(Category category) {
-        List<Post> posts = postRepository.findAllByCategory(category);
+    public Page<Post> findAllByCategory(Category category, Pageable pageable) {
+        Page<Post> posts = postRepository.findAllByCategory(category, pageable);
         return posts;
     }
 }
