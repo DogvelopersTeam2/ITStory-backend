@@ -17,7 +17,7 @@ public class ApiPostService {
     private final PostService postService;
 
     @Transactional // 수정 위함
-    public UpdatePostDto.Response updatePost(UpdatePostDto.Request updatePostRequestDto) {
+    public UpdatePostDto.Response updatePost(Long postId, UpdatePostDto.Request updatePostRequestDto) {
 
         // 1. toEntity 실행. updatePost는 컨텍스트에 올라가지 않는 Entity로, 사실상의 Dto 역할을 하게 된다.
         Post updatePost = updatePostRequestDto.toEntity();
@@ -28,7 +28,7 @@ public class ApiPostService {
          *  updatePost 변수는 현재 Id값이 없고, Category 정보도 없다. 그저 postTitle, postContent 를 실어나르기 위한 사실상의 Dto
          */
         //  2. 저장
-        Post savedPost = postService.updatePost(updatePostRequestDto.getPostId(), updatePost);
+        Post savedPost = postService.updatePost(postId, updatePost);
 
         //  3. 저장 후 반환 엔티티를 이용, Dto 생성 후 반환
         return UpdatePostDto.Response.of(savedPost);

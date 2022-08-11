@@ -1,22 +1,18 @@
 package com.blog.itstory.api.post.controller;
 
-import com.blog.itstory.api.post.dto.DeletePostDto;
 import com.blog.itstory.api.post.dto.GetPostDto;
 import com.blog.itstory.api.post.dto.NewPostDto;
 import com.blog.itstory.api.post.dto.UpdatePostDto;
 import com.blog.itstory.api.post.service.ApiPostService;
 import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
-import com.blog.itstory.domain.post.repository.PostRepository;
 import com.blog.itstory.domain.post.service.PostService;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +37,21 @@ public class PostController {
 
         return ResponseEntity.ok(postDtos);
     }
+
+    @ApiOperation(value = "글 단건 조회")
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetPostDto> getSinglePost(@PathVariable Long postId){
+
+        // 일단 전체 리스트 받아오기
+        Post post = postService.findById(postId);
+
+        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
+        GetPostDto postDto = GetPostDto.of(post);
+
+        return ResponseEntity.ok(postDto);
+    }
+
+
 
     @ApiOperation(value = "글 작성")
     @PostMapping
@@ -68,12 +79,12 @@ public class PostController {
     }
 
     @ApiOperation(value = "글 수정")
-    @PatchMapping
-    public ResponseEntity<UpdatePostDto.Response> updatePost(
+    @PatchMapping("/{postId}")
+    public ResponseEntity<UpdatePostDto.Response> updatePost( @PathVariable(value = "postId") Long postId,
                                                 @RequestBody UpdatePostDto.Request updatePostRequestDto){
 
         // 서비스에 DTO 데이터를 보내서 업데이트
-        UpdatePostDto.Response updatePostResponseDto = apiPostService.updatePost(updatePostRequestDto);
+        UpdatePostDto.Response updatePostResponseDto = apiPostService.updatePost(postId, updatePostRequestDto);
 
         // 수정 후 반환용으로, 단순 제목과 내용만 담긴 반환용 객체를 반환
         return ResponseEntity.ok(updatePostResponseDto);
@@ -81,10 +92,9 @@ public class PostController {
 
     // DTO 를 만들기 귀찮으며 데이터 형식이 하나로 고정일 경우, Map으로 받을 수 있다.
     @ApiOperation(value = "글 삭제")
-    @DeleteMapping
-    public ResponseEntity deletePost(@RequestBody Map< String, Long> deleteMap){
+    @DeleteMapping("/{postId}")
+    public ResponseEntity deletePost(@PathVariable Long postId){
 
-        Long postId = deleteMap.get("postId");
         postService.deleteById(postId);
 
         return ResponseEntity.ok().build();

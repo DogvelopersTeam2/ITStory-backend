@@ -14,9 +14,6 @@ public class UpdatePostDto {
     @ApiModel(value = "게시글 업데이트 API 요청 객체", description = "업데이트 요청 시 해당 객체 예시와 같이 요청하세요!")
     public static class Request{
 
-        @ApiModelProperty(value = "게시글 식별자", required = true, example = "3")
-        private Long postId;
-
         @ApiModelProperty(value = "게시글 제목", required = true, example = "게시글 제목입니다")
         private String postTitle;
 
