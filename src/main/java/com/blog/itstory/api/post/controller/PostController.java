@@ -67,7 +67,7 @@ public class PostController {
          *  size 를 클라이언트 측에서 직접 변경하게 하고 싶지 않으므로 (오류 방지)
          *  page 만 Optional 로 받고, size 는 직접 넣어준다.
          */
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, DEFAULT_PAGE_SIZE, Sort.by("postId").descending());
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get()-1 : 0, DEFAULT_PAGE_SIZE, Sort.by("postId").descending());
 
         // 전체 리스트 받아오기
         Page<Post> posts;
@@ -82,7 +82,7 @@ public class PostController {
 
         // 마지막으로 DTO 에 클라이언트가 활용할 정보를 넣음
         MainPageDto mainPageDto = MainPageDto.builder()
-                .currentPage(posts.getNumber() + 1)
+                .currentPage(posts.getNumber()+1)
                 .sizeofPage(posts.getSize())
                 .totalPages(posts.getTotalPages())
                 .totalPostCount(posts.getTotalElements())
