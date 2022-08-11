@@ -27,10 +27,15 @@ public class PostController {
 
     @ApiOperation(value = "전체 글 조회")
     @GetMapping("/list")
-    public ResponseEntity<List<GetPostDto>> getPosts(){
+    public ResponseEntity<List<GetPostDto>> getPosts(@RequestParam(value = "category", required = false) Category category){
 
+        List<Post> posts;
+        if (category != null){
+             posts = postService.findAllByCategory(category);
+        } else {
+             posts = postService.findAll();
+        }
         // 일단 전체 리스트 받아오기
-        List<Post> posts = postService.findAll();
 
         // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
         List<GetPostDto> postDtos = GetPostDto.of(posts);

@@ -1,5 +1,6 @@
 package com.blog.itstory.domain.post.service;
 
+import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +17,17 @@ public class PostService {
     private final PostRepository postRepository;
 
     /**
-     *  모든 Post 를 반환하는 메소드이다.
-     *  특정 Dto 로 변환하고 싶을 경우 일단 이대로 받은 다음에
-     *  DTO 클래스의 of() from() 정적 팩토리 메소드로 변환하자.
-     *  domain 패키지의 서비스는 특정 DTO 를 모르게 하기.
+     * 모든 Post 를 반환하는 메소드이다.
+     * 특정 Dto 로 변환하고 싶을 경우 일단 이대로 받은 다음에
+     * DTO 클래스의 of() from() 정적 팩토리 메소드로 변환하자.
+     * domain 패키지의 서비스는 특정 DTO 를 모르게 하기.
      */
     // readOnly
-    public List<Post> findAll(){
+    public List<Post> findAll() {
         return postRepository.findAll();
     }
-    public Post findById(Long id){
+
+    public Post findById(Long id) {
         return postRepository.findById(id).get();
     }
 
@@ -36,7 +38,7 @@ public class PostService {
     // repository.save()는 Transactional 이 없어도 되지만,
     // delete 관련 메소드는 동작하지 않음
     @Transactional
-    public void deleteById(Long postId){
+    public void deleteById(Long postId) {
         Post post = postRepository.findById(postId).get();
         postRepository.delete(post);
     }
@@ -57,7 +59,14 @@ public class PostService {
         return post;
 
     }
+
+    public List<Post> findAllByCategory(Category category) {
+        List<Post> posts = postRepository.findAllByCategory(category);
+        return posts;
+    }
 }
+
+
 
 
 
