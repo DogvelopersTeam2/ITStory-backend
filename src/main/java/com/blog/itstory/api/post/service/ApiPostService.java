@@ -94,6 +94,12 @@ public class ApiPostService {
                 .postDtos(postDtos)
                 .build();
     }
+
+    public GetPostDto findById(Long postId) {
+        Post post = postService.findById(postId);
+        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
+        return GetPostDto.of(post);
+    }
 }
 
 

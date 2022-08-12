@@ -25,7 +25,7 @@ public class GetPostDto {
     @ApiModelProperty(value = "게시글 본문", required = true, example = "게시글 본문")
     private String postContent;
 
-    @ApiModelProperty(value = "게시글 댓글 수", required = true, example = "5")
+    @ApiModelProperty(value = "게시글에 소속된 댓글 수", required = true, example = "5")
     private int commentCount;
 
     @ApiModelProperty(value = "게시글 작성일", required = true, example = "2022-08-10")

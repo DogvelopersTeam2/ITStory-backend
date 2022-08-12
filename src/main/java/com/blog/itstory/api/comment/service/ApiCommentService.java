@@ -27,11 +27,9 @@ public class ApiCommentService {
         //  post 필드를 가진 Comment 엔티티 생성
         Comment comment = requestDto.toEntity(post);
 
-//        System.out.println("저장 전에도 ID가 나오나? = "+comment.getCommentId()); // 영속 상태가 아니므로 null 출력됨!
-//        System.out.println("저장 전에도 createTime?  = "+comment.getCreateTime());
-
         // 저장
         Comment savedComment = commentService.save(comment);
+
         //  마지막으로, 엔티티를 DTO 로 변환
         return CommentDto.Response.of(savedComment);
     }
@@ -41,6 +39,33 @@ public class ApiCommentService {
         return comments.stream()
                 .map(comment -> CommentDto.Response.of(comment))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<CommentDto.Response> updateComment(Long postId, Long commentId, CommentDto.Request requestDto) {
+        // comment 객체를 가져와서 업데이트
+        Comment comment = commentService.findById(commentId);
+
+        // 반드시 postId(객체상에선 post 필드) 를 가지고 있을 것이기 때문에. Writer 와 Content 만 바꿈
+        comment.update(requestDto.getCommentWriter(), requestDto.getCommentContent());
+
+        //  다시 전체 호출. postId 는 이때 사용한다.
+        //  그리고 comment 변수는 컨텍스트에 있는 상태로 업데이트되었으므로, 정상 조회 가능하다.
+        List<Comment> comments = commentService.findAllByPostId(postId);
+
+        //  stream.map 으로 DTO 변환 후 반환하는 ofList() 사용.
+        return CommentDto.Response.ofList(comments);
+    }
+
+    @Transactional
+    public List<CommentDto.Response> deleteComment(Long postId, Long commentId) {
+        //  commentId 로 제거.
+        commentService.deleteById(commentId);
+
+        //  다시 전체 호출
+        List<Comment> comments = commentService.findAllByPostId(postId);
+        //  stream.map 으로 DTO 변환 후 반환하는 ofList() 사용.
+        return CommentDto.Response.ofList(comments);
     }
 }
 

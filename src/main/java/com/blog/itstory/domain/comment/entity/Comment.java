@@ -41,4 +41,9 @@ public class Comment extends BaseEntity {
         post.getComments().add(this); // 순수 객체 상태에서의 오류 발생 대비로, 양방향으로 값을 넣어 줌.
         System.out.println("양방향 실행");
     }
+
+    public void update(String commentWriter, String commentContent) {
+        this.commentWriter = commentWriter;
+        this.commentContent = commentContent;
+    }
 }

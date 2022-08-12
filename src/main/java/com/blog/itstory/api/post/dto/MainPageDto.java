@@ -1,5 +1,7 @@
 package com.blog.itstory.api.post.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -30,6 +32,7 @@ public class MainPageDto {
     @ApiModelProperty(value = "페이지 마지막장 여부", required = true, example = "false")
     private boolean isLastPage;
 
+    @JsonProperty(value = "posts") // Getter Setter 가 있어야 적용됨.
     @ApiModelProperty(value = "현재 페이지의 데이터", required = true)
     List<GetPostDto> postDtos;
 }

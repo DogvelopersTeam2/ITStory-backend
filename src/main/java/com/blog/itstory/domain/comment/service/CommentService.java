@@ -27,6 +27,14 @@ public class CommentService {
         Post post = postRepository.findById(postId).get();
         return commentRepository.findAllByPost(post, Sort.by("commentId").descending());
     }
+
+    public Comment findById(Long commentId) {
+        return commentRepository.findById(commentId).get();
+    }
+
+    public void deleteById(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
 }
 
 

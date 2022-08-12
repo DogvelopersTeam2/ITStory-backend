@@ -1,9 +1,8 @@
 package com.blog.itstory.api.post.controller;
 
-import com.blog.itstory.api.post.dto.GetPostDto;
-import com.blog.itstory.api.post.dto.MainPageDto;
-import com.blog.itstory.api.post.dto.NewPostDto;
-import com.blog.itstory.api.post.dto.UpdatePostDto;
+import com.blog.itstory.api.comment.dto.CommentDto;
+import com.blog.itstory.api.comment.service.ApiCommentService;
+import com.blog.itstory.api.post.dto.*;
 import com.blog.itstory.api.post.service.ApiPostService;
 import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
@@ -32,6 +31,8 @@ public class PostController {
 
     private final PostService postService; // 도메인 자체와 관련된 일을 하는 postService
     private final ApiPostService apiPostService; // 특정 DTO와 관련된 일을 하는 PostService
+    private final ApiCommentService apiCommentService;
+
 
     private final int DEFAULT_PAGE_SIZE = 7;
 
@@ -60,7 +61,7 @@ public class PostController {
 
     @ApiOperation(value = "전체 글 조회(페이징)")
     @GetMapping("/list/paging")
-    @Transactional(readOnly = true) // 페이징 기능 적용 후
+    // 페이징 기능 적용 후 이 메소드만 남기고, 기본 전체조회 메소드 삭제하기.
     public ResponseEntity<MainPageDto> getPostsWithPaging(@RequestParam(required = false) Category category,
                                                           @RequestParam(required = false) Optional<Integer> page){
         /**
@@ -81,22 +82,23 @@ public class PostController {
         return ResponseEntity.ok(mainPageDto);
     }
 
-
-
     @ApiOperation(value = "글 단건 조회")
     @GetMapping("/{postId}")
-    public ResponseEntity<GetPostDto> getSinglePost(@PathVariable Long postId){
+    public ResponseEntity<SinglePostDto> getSinglePost(@PathVariable Long postId){
 
-        // 일단 전체 리스트 받아오기
-        Post post = postService.findById(postId);
+        // 게시글 정보 받기
+        GetPostDto postDto = apiPostService.findById(postId);
 
-        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
-        GetPostDto postDto = GetPostDto.of(post);
+        //  게시글 소속 댓글 정보 받기
+        List<CommentDto.Response> comments = apiCommentService.findAllByPostId(postId);
 
-        return ResponseEntity.ok(postDto);
+        SinglePostDto singlePostDto = SinglePostDto.builder()
+                .post(postDto)
+                .comments(comments)
+                .build();
+
+        return ResponseEntity.ok(singlePostDto);
     }
-
-
 
     @ApiOperation(value = "글 작성")
     @PostMapping
