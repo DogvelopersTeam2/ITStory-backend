@@ -35,6 +35,10 @@ public class CommentService {
     public void deleteById(Long commentId) {
         commentRepository.deleteById(commentId);
     }
+
+    public void deleteAllByPost(Post post) {
+        commentRepository.deleteAllByPost(post);
+    }
 }
 
 

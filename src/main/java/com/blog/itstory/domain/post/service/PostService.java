@@ -1,5 +1,7 @@
 package com.blog.itstory.domain.post.service;
 
+import com.blog.itstory.domain.comment.repository.CommentRepository;
+import com.blog.itstory.domain.comment.service.CommentService;
 import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.repository.PostRepository;
@@ -17,6 +19,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentService commentService;
 
     /**
      * 모든 Post 를 반환하는 메소드이다.
@@ -45,7 +48,13 @@ public class PostService {
     // delete 관련 메소드는 동작하지 않음
     @Transactional
     public void deleteById(Long postId) {
+
         Post post = postRepository.findById(postId).get();
+
+        //  글을 삭제하기 위해, 연관 댓글들을 모두 DB에서 내려야 한다.
+        commentService.deleteAllByPost(post);
+
+        //  게시글 삭제!
         postRepository.delete(post);
     }
 

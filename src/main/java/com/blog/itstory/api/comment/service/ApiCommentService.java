@@ -2,6 +2,7 @@ package com.blog.itstory.api.comment.service;
 
 import com.blog.itstory.api.comment.dto.CommentDto;
 import com.blog.itstory.domain.comment.entity.Comment;
+import com.blog.itstory.domain.comment.repository.CommentRepository;
 import com.blog.itstory.domain.comment.service.CommentService;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.service.PostService;

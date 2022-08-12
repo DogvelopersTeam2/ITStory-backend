@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    public List<Comment> findAllByPost(Post post, Sort sort);
+    List<Comment> findAllByPost(Post post, Sort sort);
 
+    void deleteAllByPost(Post post);
 }
