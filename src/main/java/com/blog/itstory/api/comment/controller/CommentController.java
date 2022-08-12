@@ -16,7 +16,6 @@ import java.util.List;
 public class CommentController {
 
     private final ApiCommentService apiCommentService;
-    private final CommentService commentService;
 
     @PostMapping
     public ResponseEntity<CommentDto.Response> addComment(@RequestBody CommentDto.Request requestDto

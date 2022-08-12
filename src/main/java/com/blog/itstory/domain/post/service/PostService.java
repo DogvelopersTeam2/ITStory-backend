@@ -63,7 +63,6 @@ public class PostService {
         // 컨텍스트에 없는 updatePost 객체를 파라미터로 받아, 컨텍스트에 있는 객체인 post를 업데이트한다(변경감지).
         post.updatePost(updatePost);
         return post;
-
     }
 
     public Page<Post> findAllByCategory(Category category, Pageable pageable) {

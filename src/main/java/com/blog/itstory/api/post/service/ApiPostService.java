@@ -1,11 +1,18 @@
 package com.blog.itstory.api.post.service;
 
+import com.blog.itstory.api.post.dto.GetPostDto;
+import com.blog.itstory.api.post.dto.MainPageDto;
 import com.blog.itstory.api.post.dto.UpdatePostDto;
+import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,7 +41,64 @@ public class ApiPostService {
         return UpdatePostDto.Response.of(savedPost);
 
     }
+
+    public List<GetPostDto> findAllByCategory(Category category, Pageable pageable) {
+        Page<Post> posts = postService.findAllByCategory(category, pageable);
+
+        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
+        return GetPostDto.ofList(posts.getContent());
+    }
+    // 페이징 기능 적용 후 findAllByCategory 메소드 제거 후, 해당 메소드 사용.
+    public MainPageDto findAllByCategoryPage(Category category, Pageable pageable) {
+
+        Page<Post> posts = postService.findAllByCategory(category, pageable);
+
+        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
+        List<GetPostDto> postDtos = GetPostDto.ofList(posts.getContent());
+
+        //  마지막으로 DTO 에 클라이언트가 활용할 정보를 넣음
+        return MainPageDto.builder()
+                .currentPage(posts.getNumber() + 1)
+                .defaultSizeofPage(posts.getSize())
+                .totalPages(posts.getTotalPages())
+                .totalPostCount(posts.getTotalElements())
+                .isFirstPage(posts.isFirst())
+                .isLastPage(posts.isLast())
+                .postDtos(postDtos)
+                .build();
+    }
+
+    public List<GetPostDto> findAll(Pageable pageable) {
+        Page<Post> posts = postService.findAll(pageable);
+
+        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
+        return GetPostDto.ofList(posts.getContent());
+    }
+
+
+
+    public MainPageDto findAllPage(Pageable pageable) {
+        Page<Post> posts = postService.findAll(pageable);
+
+        // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
+        List<GetPostDto> postDtos = GetPostDto.ofList(posts.getContent());
+
+        //  마지막으로 DTO 에 클라이언트가 활용할 정보를 넣음
+        return MainPageDto.builder()
+                .currentPage(posts.getNumber() + 1)
+                .defaultSizeofPage(posts.getSize())
+                .totalPages(posts.getTotalPages())
+                .totalPostCount(posts.getTotalElements())
+                .isFirstPage(posts.isFirst())
+                .isLastPage(posts.isLast())
+                .postDtos(postDtos)
+                .build();
+    }
 }
+
+
+
+
 
 
 
