@@ -33,7 +33,6 @@ public class PostController {
     private final ApiPostService apiPostService; // 특정 DTO와 관련된 일을 하는 PostService
     private final ApiCommentService apiCommentService;
 
-
     private final int DEFAULT_PAGE_SIZE = 7;
 
     @ApiOperation(value = "전체 글 조회")
@@ -102,25 +101,9 @@ public class PostController {
 
     @ApiOperation(value = "글 작성")
     @PostMapping
-    public ResponseEntity<NewPostDto.Response> addPost(@RequestBody NewPostDto.Request newPostRequestDto){
+    public ResponseEntity<NewPostDto.Response> addPost(@RequestBody NewPostDto.Request requestDto){
 
-        // Request 정보를 활용, Post 객체 생성
-        Post newPost = Post.builder()
-                .postTitle(newPostRequestDto.getPostTitle())
-                .postContent(newPostRequestDto.getPostContent())
-                .category(Category.BACKEND) // 기본적으로 백엔드로 생성
-                .build();
-
-        // 저장
-        Post savedPost = postService.save(newPost);
-
-        // 반환 DTO 객체 생성
-        NewPostDto.Response response = NewPostDto.Response.builder()
-                .postId(savedPost.getPostId())
-                .postTitle(savedPost.getPostTitle())
-                .postContent(savedPost.getPostContent())
-                .createTime(savedPost.getCreateTime().toLocalDate())
-                .build();
+        NewPostDto.Response response = apiPostService.save(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

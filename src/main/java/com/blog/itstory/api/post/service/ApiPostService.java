@@ -2,6 +2,7 @@ package com.blog.itstory.api.post.service;
 
 import com.blog.itstory.api.post.dto.GetPostDto;
 import com.blog.itstory.api.post.dto.MainPageDto;
+import com.blog.itstory.api.post.dto.NewPostDto;
 import com.blog.itstory.api.post.dto.UpdatePostDto;
 import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
@@ -99,6 +100,26 @@ public class ApiPostService {
         Post post = postService.findById(postId);
         // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
         return GetPostDto.of(post);
+    }
+
+    public NewPostDto.Response save(NewPostDto.Request requestDto) {
+        // Request 정보를 활용, Post 객체 생성
+        Post newPost = Post.builder()
+                .postTitle(requestDto.getPostTitle())
+                .postContent(requestDto.getPostContent())
+                .category(Category.BACKEND) // 기본적으로 백엔드로 생성
+                .build();
+
+        // 저장
+        Post savedPost = postService.save(newPost);
+
+        // 반환 DTO 객체 생성
+        return NewPostDto.Response.builder()
+                .postId(savedPost.getPostId())
+                .postTitle(savedPost.getPostTitle())
+                .postContent(savedPost.getPostContent())
+                .createTime(savedPost.getCreateTime().toLocalDate())
+                .build();
     }
 }
 
