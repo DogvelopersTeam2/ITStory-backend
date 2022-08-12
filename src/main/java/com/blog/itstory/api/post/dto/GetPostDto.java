@@ -25,6 +25,9 @@ public class GetPostDto {
     @ApiModelProperty(value = "게시글 본문", required = true, example = "게시글 본문")
     private String postContent;
 
+    @ApiModelProperty(value = "게시글 댓글 수", required = true, example = "5")
+    private int commentCount;
+
     @ApiModelProperty(value = "게시글 작성일", required = true, example = "2022-08-10")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate createTime;
@@ -40,6 +43,7 @@ public class GetPostDto {
                 .postId(post.getPostId())
                 .postTitle(post.getPostTitle())
                 .postContent(post.getPostContent())
+                .commentCount(post.getComments().size())
                 .createTime(post.getCreateTime().toLocalDate())
                 .build();
     }

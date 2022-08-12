@@ -22,7 +22,7 @@ public class MainPageDto {
     private long currentPage;
 
     @ApiModelProperty(value = "한 페이지의 게시글 사이즈(기본값: 7)", required = true, example = "7")
-    private long sizeofPage;
+    private long defaultSizeofPage;
 
     @ApiModelProperty(value = "페이지 첫장 여부", required = true, example = "true")
     private boolean isFirstPage;

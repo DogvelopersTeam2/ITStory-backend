@@ -15,7 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +35,10 @@ public class PostController {
     private final ApiPostService apiPostService; // 특정 DTO와 관련된 일을 하는 PostService
 
     private final int DEFAULT_PAGE_SIZE = 7;
+
     @ApiOperation(value = "전체 글 조회")
     @GetMapping("/list")
+    @Transactional
     public ResponseEntity<List<GetPostDto>> getPosts(@RequestParam(required = false) Category category,
                                                      @RequestParam(required = false) Optional<Integer> page){
         /**
@@ -83,7 +87,7 @@ public class PostController {
         // 마지막으로 DTO 에 클라이언트가 활용할 정보를 넣음
         MainPageDto mainPageDto = MainPageDto.builder()
                 .currentPage(posts.getNumber()+1)
-                .sizeofPage(posts.getSize())
+                .defaultSizeofPage(posts.getSize())
                 .totalPages(posts.getTotalPages())
                 .totalPostCount(posts.getTotalElements())
                 .isFirstPage(posts.isFirst())
@@ -93,6 +97,8 @@ public class PostController {
 
         return ResponseEntity.ok(mainPageDto);
     }
+
+
 
     @ApiOperation(value = "글 단건 조회")
     @GetMapping("/{postId}")
@@ -111,7 +117,7 @@ public class PostController {
 
     @ApiOperation(value = "글 작성")
     @PostMapping
-    public ResponseEntity<NewPostDto.Response> newPost(@RequestBody NewPostDto.Request newPostRequestDto){
+    public ResponseEntity<NewPostDto.Response> addPost(@RequestBody NewPostDto.Request newPostRequestDto){
 
         // Request 정보를 활용, Post 객체 생성
         Post newPost = Post.builder()
@@ -131,7 +137,7 @@ public class PostController {
                 .createTime(savedPost.getCreateTime().toLocalDate())
                 .build();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @ApiOperation(value = "글 수정")

@@ -32,6 +32,7 @@ public class Post extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    //  글에 속한 댓글. 글을 조회할 때 댓글도 같이 보여줘야 하기 때문에 다대일 양방향 매핑함.
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
