@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/test")
+@RequestMapping("/test")
 public class ApiTestController {
 
     private final MemberRepository memberRepository;
