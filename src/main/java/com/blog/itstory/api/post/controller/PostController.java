@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/post")
+@RequestMapping("/post")
 // 컨트롤러는 필연적으로 Dto 에 의존하게 되므로,
 // domain 계층에서 똑같이 PostController 이름을 하고 있는 클래스가 생길 걱정은 안 해도 될 듯.
 // ApiPostController 가 아닌 PostController 로 하자.
