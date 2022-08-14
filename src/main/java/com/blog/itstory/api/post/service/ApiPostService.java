@@ -106,7 +106,7 @@ public class ApiPostService {
         Post newPost = Post.builder()
                 .postTitle(requestDto.getPostTitle())
                 .postContent(requestDto.getPostContent())
-                .category(Category.BACKEND) // 기본적으로 백엔드로 생성
+                .category(requestDto.getPostCategory()) // 기본적으로 백엔드로 생성
                 .build();
 
         // 저장
@@ -117,8 +117,14 @@ public class ApiPostService {
                 .postId(savedPost.getPostId())
                 .postTitle(savedPost.getPostTitle())
                 .postContent(savedPost.getPostContent())
+                .postCategory(savedPost.getCategory())
                 .createTime(savedPost.getCreateTime().toLocalDate())
                 .build();
+    }
+
+    public List<GetPostDto> findAll(String postContent, String postTitle, Pageable pageable) {
+        Page<Post> foundPost = postService.findAll(postContent, postTitle, pageable);
+        return GetPostDto.ofList(foundPost.getContent());
     }
 }
 

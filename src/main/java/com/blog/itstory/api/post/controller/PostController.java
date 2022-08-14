@@ -5,11 +5,14 @@ import com.blog.itstory.api.comment.service.ApiCommentService;
 import com.blog.itstory.api.post.dto.*;
 import com.blog.itstory.api.post.service.ApiPostService;
 import com.blog.itstory.domain.post.constant.Category;
+import com.blog.itstory.domain.post.entity.Post;
+import com.blog.itstory.domain.post.repository.PostRepository;
 import com.blog.itstory.domain.post.service.PostService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,6 +38,7 @@ public class PostController {
     private final PostService postService; // 도메인 자체와 관련된 일을 하는 postService
     private final ApiPostService apiPostService; // 특정 DTO와 관련된 일을 하는 PostService
     private final ApiCommentService apiCommentService;
+    private final PostRepository postRepository;
 
     private final int DEFAULT_PAGE_SIZE = 7;
 
@@ -42,7 +46,8 @@ public class PostController {
     @GetMapping("/list")
     @Transactional
     public ResponseEntity<List<GetPostDto>> getPosts(@RequestParam(required = false) Category category,
-                                                     @RequestParam(required = false)   Optional<@Range(min = 1,message = "페이지는 1부터 검색해주세요")  Integer> page){
+                                                     @RequestParam(required = false)   Optional<@Range(min = 1,message = "페이지는 1부터 검색해주세요")  Integer> page,
+                                                     @RequestParam(required = false, defaultValue = "") String searchText){
         /**
          *  PageableDefault(size=5, page=0) 하는 방법도 있겠으나
          *  size 를 클라이언트 측에서 직접 변경하게 하고 싶지 않으므로 (오류 방지)
@@ -52,10 +57,14 @@ public class PostController {
 
         // 전체 리스트 받아오기
         List<GetPostDto> postDtos;
+
         if (category != null){
-            postDtos = apiPostService.findAllByCategory(category, pageable);
+            // 카테고리가 있으면 searchText 무시함. Category=backend&searchText=spring 임의로 이렇게 보내도 무시된다는 것.
+           postDtos = apiPostService.findAllByCategory(category, pageable);
         } else {
-            postDtos = apiPostService.findAll(pageable);
+            //  카테고리가 없으면 검색어로 찾음.
+            //  검색어는 기본적으로 empty고, empty 상태에선 where Post.category like "%%" 이렇게 나가서 모두 조회되는 듯.
+            postDtos = apiPostService.findAll(searchText, searchText, pageable);
         }
 
         return ResponseEntity.ok(postDtos);

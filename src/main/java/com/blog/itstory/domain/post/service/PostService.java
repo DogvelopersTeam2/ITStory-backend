@@ -78,6 +78,10 @@ public class PostService {
         Page<Post> posts = postRepository.findAllByCategory(category, pageable);
         return posts;
     }
+
+    public Page<Post> findAll(String postContent, String postTitle, Pageable pageable) {
+        return postRepository.findAllByPostContentIgnoreCaseContainingOrPostTitleContainingIgnoreCase(postContent, postTitle, pageable);
+    }
 }
 
 

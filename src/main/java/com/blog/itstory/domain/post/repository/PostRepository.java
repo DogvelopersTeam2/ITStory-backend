@@ -13,7 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findAll(Pageable pageable);
 
-
+    Page<Post> findAllByPostContentIgnoreCaseContainingOrPostTitleContainingIgnoreCase(String postContent, String postTitle, Pageable pageable);
 
     //findAllWithPageable
 }
