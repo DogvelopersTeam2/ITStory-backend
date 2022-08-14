@@ -5,25 +5,28 @@ import com.blog.itstory.api.comment.service.ApiCommentService;
 import com.blog.itstory.api.post.dto.*;
 import com.blog.itstory.api.post.service.ApiPostService;
 import com.blog.itstory.domain.post.constant.Category;
-import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.service.PostService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")
+@Validated
 // 컨트롤러는 필연적으로 Dto 에 의존하게 되므로,
 // domain 계층에서 똑같이 PostController 이름을 하고 있는 클래스가 생길 걱정은 안 해도 될 듯.
 // ApiPostController 가 아닌 PostController 로 하자.
@@ -39,7 +42,7 @@ public class PostController {
     @GetMapping("/list")
     @Transactional
     public ResponseEntity<List<GetPostDto>> getPosts(@RequestParam(required = false) Category category,
-                                                     @RequestParam(required = false) Optional<Integer> page){
+                                                     @RequestParam(required = false)   Optional<@Range(min = 1,message = "페이지는 1부터 검색해주세요")  Integer> page){
         /**
          *  PageableDefault(size=5, page=0) 하는 방법도 있겠으나
          *  size 를 클라이언트 측에서 직접 변경하게 하고 싶지 않으므로 (오류 방지)
@@ -62,7 +65,7 @@ public class PostController {
     @GetMapping("/list/paging")
     // 페이징 기능 적용 후 이 메소드만 남기고, 기본 전체조회 메소드 삭제하기.
     public ResponseEntity<MainPageDto> getPostsWithPaging(@RequestParam(required = false) Category category,
-                                                          @RequestParam(required = false) Optional<Integer> page){
+                                                          @RequestParam(required = false) Optional<@Range(min = 1,message = "페이지는 1부터 검색해주세요") Integer> page){
         /**
          *  PageableDefault(size=5, page=0) 하는 방법도 있겠으나
          *  size 를 클라이언트 측에서 직접 변경하게 하고 싶지 않으므로 (오류 방지)
@@ -86,6 +89,7 @@ public class PostController {
     public ResponseEntity<SinglePostDto> getSinglePost(@PathVariable Long postId){
 
         // 게시글 정보 받기
+        // todo 여기부터 예외처리
         GetPostDto postDto = apiPostService.findById(postId);
 
         //  게시글 소속 댓글 정보 받기
@@ -101,7 +105,7 @@ public class PostController {
 
     @ApiOperation(value = "글 작성")
     @PostMapping
-    public ResponseEntity<NewPostDto.Response> addPost(@RequestBody NewPostDto.Request requestDto){
+    public ResponseEntity<NewPostDto.Response> addPost(@RequestBody @Validated NewPostDto.Request requestDto){
 
         NewPostDto.Response response = apiPostService.save(requestDto);
 

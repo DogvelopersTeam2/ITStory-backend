@@ -45,7 +45,6 @@ public class ApiPostService {
 
     public List<GetPostDto> findAllByCategory(Category category, Pageable pageable) {
         Page<Post> posts = postService.findAllByCategory(category, pageable);
-
         // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
         return GetPostDto.ofList(posts.getContent());
     }
