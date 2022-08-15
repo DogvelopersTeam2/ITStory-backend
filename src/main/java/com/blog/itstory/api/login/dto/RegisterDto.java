@@ -1,7 +1,9 @@
 package com.blog.itstory.api.login.dto;
 
+import com.blog.itstory.domain.member.constant.Role;
 import com.blog.itstory.domain.member.entity.Member;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -24,5 +26,11 @@ public class RegisterDto {
     @Size(min = 4, max = 30, message = "비밀번호는 4~30자 사이로 해줘요")
     private String password2;
 
-    //public Member toEntity(PasswordEn)
+    public Member toEntity(PasswordEncoder passwordEncoder) {
+        return Member.builder()
+                .email(email)
+                .role(Role.ADMIN)
+                .password(passwordEncoder.encode(password1))
+                .build();
+    }
 }

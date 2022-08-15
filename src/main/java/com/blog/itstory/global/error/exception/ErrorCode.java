@@ -16,10 +16,14 @@ public enum ErrorCode {
     POST_NOT_EXISTS(400, "게시글을 찾을 수 없습니다."),
 
     //  댓글
-    COMMENT_NOT_EXISTS(400, "댓글을 찾을 수 없습니다");
+    COMMENT_NOT_EXISTS(400, "댓글을 찾을 수 없습니다"),
 
 
-    //
+    //  회원
+    MISMATCHED_PASSWORD(400, "비밀번호 입력이 일치하지 않습니다.");
+
+
+
     private int status;
     private String message;
 

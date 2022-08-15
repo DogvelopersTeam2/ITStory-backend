@@ -1,9 +1,10 @@
 package com.blog.itstory.api.test.psvm;
 
+import com.blog.itstory.domain.post.constant.Category;
+
 public class Psvm {
     public static void main(String[] args) {
-        int a=1;
-        int b=2;
-        System.out.println((double) a/b);
+        Category category = Category.BACKEND;
+        System.out.println(category);
     }
 }
