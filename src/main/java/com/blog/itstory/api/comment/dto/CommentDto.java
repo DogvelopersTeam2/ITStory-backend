@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.Size;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,9 +18,11 @@ public class CommentDto {
     public static class Request{
 
         @ApiModelProperty(value = "댓글 작성자", required = true, example = "김경민")
+        @Size(min = 1, max = 30, message = "댓글 작성자의 이름은 1~30자로 해 주세요.")
         private String commentWriter;
 
         @ApiModelProperty(value = "댓글 내용", required = true, example = "김경민의 헛소리")
+        @Size(min = 1, max = 500, message = "댓글 내용은 1~500자로 해 주세요.")
         private String commentContent;
 
         // 해당 Dto 인스턴스의 값으로 Entity를 만드는 것이기 때문에, static 이 아니어도 됨.

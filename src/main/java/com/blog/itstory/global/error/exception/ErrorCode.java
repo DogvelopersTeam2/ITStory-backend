@@ -5,11 +5,21 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    //  예외처리 한글 안내용
+    /**
+     *  에러처리 안내용 ENUM
+     */
+
     HTTP_REQUEST_METHOD_NOT_SUPPORTED(405, "지정하신 URL은 사용하신 HTTP 메소드를 지원하지 않습니다."),
     METHOD_ARGUMENT_TYPE_MISMATCH(400, "유효하지 않은 요청값입니다"),
-    UNKNOWN_EXCEPTION(400, "알 수 없는 오류입니다.");
 
+    //  게시글
+    POST_NOT_EXISTS(400, "게시글을 찾을 수 없습니다."),
+
+    //  댓글
+    COMMENT_NOT_EXISTS(400, "댓글을 찾을 수 없습니다");
+
+
+    //
     private int status;
     private String message;
 

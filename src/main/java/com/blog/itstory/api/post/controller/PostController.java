@@ -74,7 +74,8 @@ public class PostController {
     @GetMapping("/list/paging")
     // 페이징 기능 적용 후 이 메소드만 남기고, 기본 전체조회 메소드 삭제하기.
     public ResponseEntity<MainPageDto> getPostsWithPaging(@RequestParam(required = false) Category category,
-                                                          @RequestParam(required = false) Optional<@Range(min = 1,message = "페이지는 1부터 검색해주세요") Integer> page){
+                                                          @RequestParam(required = false) Optional<@Range(min = 1,message = "페이지는 1부터 검색해주세요") Integer> page,
+                                                          @RequestParam(required = false, defaultValue = "") String searchText){
         /**
          *  PageableDefault(size=5, page=0) 하는 방법도 있겠으나
          *  size 를 클라이언트 측에서 직접 변경하게 하고 싶지 않으므로 (오류 방지)
@@ -87,7 +88,7 @@ public class PostController {
         if (category != null){
             mainPageDto = apiPostService.findAllByCategoryPage(category, pageable);
         } else {
-            mainPageDto = apiPostService.findAllPage(pageable);
+            mainPageDto = apiPostService.findAllPage(searchText, searchText, pageable);
         }
 
         return ResponseEntity.ok(mainPageDto);
@@ -98,10 +99,15 @@ public class PostController {
     public ResponseEntity<SinglePostDto> getSinglePost(@PathVariable Long postId){
 
         // 게시글 정보 받기
-        // todo 여기부터 예외처리
         GetPostDto postDto = apiPostService.findById(postId);
 
-        //  게시글 소속 댓글 정보 받기
+        //  게시글 소속 댓글 정보 받기. 댓글 정보를 불러오려면 일단 글의 존재를 확인해야 한다.
+        //  그런데 첫줄에서 postId를 이미 한번 검증했는데, //  처리 로직 실행 중 DB 변경을 고려해서 검증을 또 하는 것이 맞을까?
+        //  만약 두 번째 검증을 생략했다가, 첫 번째 검증을 하고 돌아오는 사이에 글이 삭제되었으면 어떡하지?
+        //  이러한 DB 동시성 문제는 어떻게 해결할까? 모든 메소드에 검증로직을 달아야 하나? 아니면 다른 기술적 해결방법이 있을까?
+        //  스레드는 사용자마다 스프링이 알아서 생성해주니까 메모리상의 값은 그렇다 쳐도, DB는 모든 사용자가 공유하는데?
+        //  JPA 책 뒷부분을 일단 읽어보자. 비관적 락과 낙관적 락, 동시성 문제 등으로 찾아보자.
+        //  일단 findAllByPostId 는 다른 컨트롤러 메소드에서도 호출되므로, 검증로직을 넣기로 함.
         List<CommentDto.Response> comments = apiCommentService.findAllByPostId(postId);
 
         SinglePostDto singlePostDto = SinglePostDto.builder()
@@ -124,7 +130,7 @@ public class PostController {
     @ApiOperation(value = "글 수정")
     @PatchMapping("/{postId}")
     public ResponseEntity<UpdatePostDto.Response> updatePost( @PathVariable(value = "postId") Long postId,
-                                                @RequestBody UpdatePostDto.Request updatePostRequestDto){
+                                                @RequestBody @Validated UpdatePostDto.Request updatePostRequestDto){
 
         // 서비스에 DTO 데이터를 보내서 업데이트
         UpdatePostDto.Response updatePostResponseDto = apiPostService.updatePost(postId, updatePostRequestDto);

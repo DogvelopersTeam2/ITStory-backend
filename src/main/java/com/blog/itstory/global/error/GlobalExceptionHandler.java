@@ -1,5 +1,6 @@
 package com.blog.itstory.global.error;
 
+import com.blog.itstory.global.error.exception.BusinessException;
 import com.blog.itstory.global.error.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
@@ -73,6 +74,20 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, messages);
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e){
+        //  ErrorResponse 에 추가할 에러메시지 리스트 생성
+        List<String> message = List.of(e.getMessage());
+
+        //  해당 Custom Exception 에 있는 status 를 HttpStatus 로 바꿈.
+        HttpStatus httpStatus = HttpStatus.valueOf(e.getStatus());
+
+        //  Response 생성 후 반환
+        ErrorResponse errorResponse = ErrorResponse.of(httpStatus, message);
+
+        return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

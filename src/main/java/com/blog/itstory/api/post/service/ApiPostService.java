@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -75,10 +76,8 @@ public class ApiPostService {
         return GetPostDto.ofList(posts.getContent());
     }
 
-
-
-    public MainPageDto findAllPage(Pageable pageable) {
-        Page<Post> posts = postService.findAll(pageable);
+    public MainPageDto findAllPage(String postTitle, String postContent, Pageable pageable) {
+        Page<Post> posts = postService.findAll(postTitle, postContent, pageable);
 
         // 이제 DTO 로 변환해야 함. DTO 의 정적 팩토리 메소드 사용
         List<GetPostDto> postDtos = GetPostDto.ofList(posts.getContent());
@@ -108,6 +107,7 @@ public class ApiPostService {
                 .postContent(requestDto.getPostContent())
                 .category(requestDto.getPostCategory()) // 기본적으로 백엔드로 생성
                 .build();
+
 
         // 저장
         Post savedPost = postService.save(newPost);

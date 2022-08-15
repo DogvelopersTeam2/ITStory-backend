@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CommentController {
     private final ApiCommentService apiCommentService;
 
     @PostMapping
-    public ResponseEntity<CommentDto.Response> addComment(@RequestBody CommentDto.Request requestDto
+    public ResponseEntity<CommentDto.Response> addComment(@RequestBody @Validated CommentDto.Request requestDto
                                             , @PathVariable Long postId){
         /**
          *  바로 commentService 사용한다면?

@@ -5,6 +5,8 @@ import com.blog.itstory.domain.comment.service.CommentService;
 import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.blog.itstory.domain.post.repository.PostRepository;
+import com.blog.itstory.global.error.exception.EntityNotFoundException;
+import com.blog.itstory.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +39,8 @@ public class PostService {
     }
 
     public Post findById(Long id) {
-        return postRepository.findById(id).get();
+        //  단건 조회의 경우 NPE 발생 가능성이 높으므로 Optional 예외처리를 하자. 컬렉션 조회는 빈 컬렉션이 반환되므로 다르게 처리해도 될 듯.
+        return postRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(ErrorCode.POST_NOT_EXISTS));
     }
 
     public Post save(Post newPost) {
@@ -49,7 +52,7 @@ public class PostService {
     @Transactional
     public void deleteById(Long postId) {
 
-        Post post = postRepository.findById(postId).get();
+        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_EXISTS));
 
         //  글을 삭제하기 위해, 연관 댓글들을 모두 DB에서 내려야 한다.
         commentService.deleteAllByPost(post);
