@@ -1,5 +1,6 @@
 package com.blog.itstory.api.post.dto;
 
+import com.blog.itstory.domain.post.constant.Category;
 import com.blog.itstory.domain.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -22,6 +23,9 @@ public class GetPostDto {
     @ApiModelProperty(value = "게시글 제목", required = true, example = "게시글 제목입니다.")
     private String postTitle;
 
+    @ApiModelProperty(value = "게시글 카테고리", required = true, example = "BACKEND")
+    private Category postCategory;
+
     @ApiModelProperty(value = "게시글 본문", required = true, example = "게시글 본문")
     private String postContent;
 
@@ -42,6 +46,7 @@ public class GetPostDto {
         return GetPostDto.builder()
                 .postId(post.getPostId())
                 .postTitle(post.getPostTitle())
+                .postCategory(post.getCategory())
                 .postContent(post.getPostContent())
                 .commentCount(post.getComments().size())
                 .createTime(post.getCreateTime().toLocalDate())

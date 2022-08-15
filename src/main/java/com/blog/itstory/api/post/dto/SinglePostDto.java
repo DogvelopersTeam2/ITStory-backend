@@ -1,6 +1,7 @@
 package com.blog.itstory.api.post.dto;
 
 import com.blog.itstory.api.comment.dto.CommentDto;
+import com.blog.itstory.domain.post.constant.Category;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -19,4 +20,7 @@ public class SinglePostDto {
 
     @ApiModelProperty(value = "게시글 소속 댓글들 ")
     private List<CommentDto.Response> comments;
+
+    @ApiModelProperty(value = "게시글 카테고리")
+    private Category postCategory;
 }
