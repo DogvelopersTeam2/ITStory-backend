@@ -13,6 +13,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.Instant;
 import java.time.LocalDate;
 
 /**
@@ -56,6 +57,6 @@ public class NewPostDto {
 
         @ApiModelProperty(value = "게시글 작성일", required = true, example = "2022-08-10")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-        private LocalDate createTime;
+        private Instant createTime;
     }
 }

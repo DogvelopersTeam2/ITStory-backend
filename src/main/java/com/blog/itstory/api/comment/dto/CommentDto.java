@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.Size;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +53,8 @@ public class CommentDto {
         private String createDateTime;
 
         public static Response of(Comment comment) {
-            String formatted = comment.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String formatted = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault()).format(comment.getCreateTime());
+
 
             return Response.builder()
                     .commentId(comment.getCommentId())

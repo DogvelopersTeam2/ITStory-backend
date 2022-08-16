@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class GetPostDto {
 
     @ApiModelProperty(value = "게시글 작성일", required = true, example = "2022-08-10")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDate createTime;
+    private Instant createTime;
 
     public static List<GetPostDto> ofList(List<Post> posts){
         return posts.stream()
@@ -49,7 +50,7 @@ public class GetPostDto {
                 .postCategory(post.getCategory())
                 .postContent(post.getPostContent())
                 .commentCount(post.getComments().size())
-                .createTime(post.getCreateTime().toLocalDate())
+                .createTime(post.getCreateTime())
                 .build();
     }
 }
