@@ -53,8 +53,8 @@ public class CommentDto {
         private String createDateTime;
 
         public static Response of(Comment comment) {
-            String formatted = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault()).format(comment.getCreateTime());
-
+            //String formatted = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault()).format(comment.getCreateTime());
+             String formatted = comment.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
             return Response.builder()
                     .commentId(comment.getCommentId())

@@ -19,8 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @PostConstruct
     void init() {
-        System.out.println("dsfsadfsdafsdhfhsjk1111111 = ");
-        ///TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 
     private final AuthenticationInterceptor authenticationInterceptor;

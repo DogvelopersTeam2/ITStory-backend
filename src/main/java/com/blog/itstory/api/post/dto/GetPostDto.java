@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,8 +51,9 @@ public class GetPostDto {
                 .postCategory(post.getCategory())
                 .postContent(post.getPostContent())
                 .commentCount(post.getComments().size())
-                .createTime(post.getCreateTime())
+                //.createTime(post.getCreateTime())
                 .build();
+
     }
 }
 
