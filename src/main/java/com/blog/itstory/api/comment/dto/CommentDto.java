@@ -2,12 +2,14 @@ package com.blog.itstory.api.comment.dto;
 
 import com.blog.itstory.domain.comment.entity.Comment;
 import com.blog.itstory.domain.post.entity.Post;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -50,17 +52,18 @@ public class CommentDto {
         private String commentContent;
 
         @ApiModelProperty(value = "댓글 작성 시간", required = true, example = "2020-08-02 13:42")
-        private String createDateTime;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        private LocalDateTime createDateTime;
 
         public static Response of(Comment comment) {
-            //String formatted = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault()).format(comment.getCreateTime());
-             String formatted = comment.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            //String formatted = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault()).format(comment.getCreateTime()); // Instant를 사용할 시의 코드
+            // String formatted = comment.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")); @JsonFormat pattern 사용하였으므로, 포맷터 사용 코드 제거
 
             return Response.builder()
                     .commentId(comment.getCommentId())
                     .commentWriter(comment.getCommentWriter())
                     .commentContent(comment.getCommentContent())
-                    .createDateTime(formatted)
+                    .createDateTime(comment.getCreateTime())
                     .build();
         }
 

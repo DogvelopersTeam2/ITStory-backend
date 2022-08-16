@@ -17,11 +17,6 @@ import java.util.TimeZone;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    @PostConstruct
-    void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-    }
-
     private final AuthenticationInterceptor authenticationInterceptor;
 
     @Override

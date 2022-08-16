@@ -118,7 +118,7 @@ public class ApiPostService {
                 .postTitle(savedPost.getPostTitle())
                 .postContent(savedPost.getPostContent())
                 .postCategory(savedPost.getCategory())
-                //.createTime(savedPost.getCreateTime())
+                .createTime(savedPost.getCreateTime())
                 .build();
     }
 

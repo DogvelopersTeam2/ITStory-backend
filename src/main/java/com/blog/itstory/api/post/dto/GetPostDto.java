@@ -36,7 +36,7 @@ public class GetPostDto {
 
     @ApiModelProperty(value = "게시글 작성일", required = true, example = "2022-08-10")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Instant createTime;
+    private LocalDateTime createTime;
 
     public static List<GetPostDto> ofList(List<Post> posts){
         return posts.stream()
@@ -51,7 +51,7 @@ public class GetPostDto {
                 .postCategory(post.getCategory())
                 .postContent(post.getPostContent())
                 .commentCount(post.getComments().size())
-                //.createTime(post.getCreateTime())
+                .createTime(post.getCreateTime())
                 .build();
 
     }
