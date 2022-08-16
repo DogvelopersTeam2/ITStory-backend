@@ -1,21 +1,25 @@
 package com.blog.itstory.global.config;
 
 import com.blog.itstory.global.converter.CategoryConverter;
+import com.blog.itstory.global.interceptor.AuthenticationInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
+    private final AuthenticationInterceptor authenticationInterceptor;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 이 경로에 대해서
-                .allowedOrigins("*") // CORS 모두 미적용
+                .allowedOrigins("*") // CORS 모두 활성화
                 .allowedMethods(
                         HttpMethod.GET.name()
                         , HttpMethod.POST.name()
@@ -31,6 +35,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new CategoryConverter());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authenticationInterceptor)
+                .order(1)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login", "/register", "/token")
+                ;
     }
 }
 

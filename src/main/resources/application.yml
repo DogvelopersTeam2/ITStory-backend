@@ -49,6 +49,6 @@ kakao:
 
 token:
   secret: ${tokensecret} #
-  access-token-expiration-time: 900000  # 15분
+  access-token-expiration-time: 900000  # 15분. msec
   refresh-token-expiration-time: 1210500000 # 2주
 
