@@ -7,6 +7,7 @@ import com.blog.itstory.api.login.service.LoginService;
 import com.blog.itstory.api.login.validator.LoginValidator;
 import com.blog.itstory.global.error.exception.BusinessException;
 import com.blog.itstory.global.error.exception.ErrorCode;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class LoginController {
     private final LoginService loginService;
     private final LoginValidator loginValidator;
 
+    @ApiOperation(value = "회원가입")
     @PostMapping("/register")
     public ResponseEntity<Map<String, HttpStatus>> register(@RequestBody @Validated RegisterDto requestDto){
 
@@ -44,6 +46,7 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
     }
 
+    @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity<TokenDto.Response> login(@RequestBody @Validated TokenDto.Request request){
 
@@ -52,6 +55,7 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
+    @ApiOperation(value = "로그아웃")
     @PostMapping("/logout")
     public ResponseEntity <Map<String, HttpStatus>> logout(HttpServletRequest httpServletRequest){
 
@@ -69,6 +73,7 @@ public class LoginController {
     }
 
     // refresh token 이용, access token 재발급 요청 경로
+    @ApiOperation(value = "액세스 토큰 재발급")
     @PostMapping("/token")
     public ResponseEntity<AccessTokenResponseDto> getAccessToken(HttpServletRequest httpServletRequest){
 

@@ -20,6 +20,7 @@ public class CommentController {
 
     private final ApiCommentService apiCommentService;
 
+    @ApiOperation(value = "댓글 등록")
     @PostMapping
     public ResponseEntity<CommentDto.Response> addComment(@RequestBody @Validated CommentDto.Request requestDto
                                             , @PathVariable Long postId){
@@ -48,6 +49,7 @@ public class CommentController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @ApiOperation(value = "댓글 수정")
     @PatchMapping("/{commentId}")
     public ResponseEntity<List<CommentDto.Response>> updateComment(@PathVariable Long postId, @PathVariable Long commentId
                                         , @RequestBody CommentDto.Request requestDto){
@@ -56,6 +58,7 @@ public class CommentController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @ApiOperation(value = "댓글 삭제")
     @DeleteMapping("/{commentId}")
     public ResponseEntity<List<CommentDto.Response>> deleteComment(@PathVariable Long postId, @PathVariable Long commentId){
 
