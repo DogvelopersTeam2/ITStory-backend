@@ -42,14 +42,14 @@ public class TokenDto {
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         @ApiModelProperty(value = "액세스 토큰 만료시간", required = true, example = "yyyy-MM-dd HH:mm:ss")
-        private Date accessTokenExpireTime;
+        private Date accessTokenExpirationTime;
 
         @ApiModelProperty(value = "리프레쉬 토큰", required = true, example = "{header}.{payload}.{signature}")
         private String refreshToken;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         @ApiModelProperty(value = "리프레쉬 토큰 만료시간", required = true, example = "yyyy-MM-dd HH:mm:ss")
-        private Date refreshTokenExpireTime;
+        private Date refreshTokenExpirationTime;
     }
 }
 

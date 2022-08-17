@@ -52,6 +52,6 @@ public class Member extends BaseEntity {
 
     public void updateRefreshTokenAndExpirationTime(TokenDto.Response tokenDto) {
         this.refreshToken = tokenDto.getRefreshToken();
-        this.tokenExpirationTime = DateTimeUtils.convertToLocalDateTime(tokenDto.getRefreshTokenExpireTime());
+        this.tokenExpirationTime = DateTimeUtils.convertToLocalDateTime(tokenDto.getRefreshTokenExpirationTime());
     }
 }

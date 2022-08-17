@@ -21,13 +21,13 @@ public class AccessTokenResponseDto {
 
     // 날짜타입 변환은 JsonFormat 혹은 @DateTimeFormat (get 요청)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private Date accessTokenExpireTime;
+    private Date accessTokenExpirationTime;
 
     public static AccessTokenResponseDto of(String accessToken, Date accessTokenExpireTime){
         return AccessTokenResponseDto.builder()
                 .grantType(GrantType.BEARER.getType())
                 .accessToken(accessToken)
-                .accessTokenExpireTime(accessTokenExpireTime)
+                .accessTokenExpirationTime(accessTokenExpireTime)
                 .build();
     }
 }

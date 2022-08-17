@@ -37,9 +37,9 @@ public class TokenProvider {
         return TokenDto.Response.builder()
                 .grantType(GrantType.BEARER.getType())
                 .accessToken(accessToken)
-                .accessTokenExpireTime(accessTokenExpireTime)
+                .accessTokenExpirationTime(accessTokenExpireTime)
                 .refreshToken(refreshToken)
-                .refreshTokenExpireTime(refreshTokenExpireTime)
+                .refreshTokenExpirationTime(refreshTokenExpireTime)
                 .build();
     }
 
