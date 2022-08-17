@@ -69,7 +69,7 @@ public class LoginService {
         //  3. 로그인할 때 발행한 refresh token 만료 처리
         String email = tokenProvider.getMemberEmail(accessToken); // claims.getAudience() 로 email 가져옴
         Member member = memberService.findByEmail(email);
-        member.expireRefreshToken(LocalDateTime.now()); // Member 객체의 필드 tokenExpirationTime 만료시킴
+        member.expireRefreshToken(LocalDateTime.now()); // Member 객체의 필드 tokenExpirationTime 만료시킴. 변경 감지
     }
 
     public AccessTokenResponseDto createAccessTokenByRefreshToken(String refreshToken, LocalDateTime now) {
