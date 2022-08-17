@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 이 경로에 대해서
-                .allowedOrigins("*") // CORS 모두 활성화
+                .allowedOrigins("https://itstory-nohwookjin.vercel.app/") // CORS 모두 활성화
                 .allowedMethods(
                         HttpMethod.GET.name()
                         , HttpMethod.POST.name()
