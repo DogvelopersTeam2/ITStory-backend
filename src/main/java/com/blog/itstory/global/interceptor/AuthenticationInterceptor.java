@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.pattern.PathPattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,14 +28,27 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("AuthenticationInterceptor : preHandle");
 
-        if (true){
+        log.info("AuthenticationInterceptor : preHandle");
+        if (true) {
             return true;
         }
         if( request.getMethod().equals( "GET" )){
             return true;
         }
+
+        //  댓글 작성 /post/66/comment [POST] 요청을 허용하기 위한 로직
+        String[] splitedUri = request.getRequestURI().split("/");
+        // "" + post + 66 + comment 로 분리되므로, 배열 길이가 4이며 [POST] 요청일 시 true
+        if( request.getMethod().equals("POST") && splitedUri.length == 4){
+            //  배열 길이(uri 형식) 과 [POST] 요청이 맞으므로, 요청한 uri 가 댓글작성 uri 인지 마지막으로 확인
+            if ( (splitedUri[1]+splitedUri[3]).equals("postcomment")){
+                log.info("댓글 작성을 허용합니다");
+                return true;
+            }
+        }
+
+        log.info("인증 진입");
 
 
         //  1. authorization 헤더가 있는지 체크
